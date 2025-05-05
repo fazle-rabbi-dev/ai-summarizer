@@ -24,31 +24,54 @@ const Popup = ({ setDisplayPopup }) => {
 	const [rapidKey, setRapidKey] = useState("");
 	const [geminiKey, setGeminiKey] = useState("");
 	const [currentApiKeys, setCurrentApiKeys] = useState({});
+	const [transcriptApiUrl, setTranscriptApiUrl] =
+		useState("");
+	const [transcriptApiVariant, setTranscriptApiVariant] =
+		useState("");
 
 	useEffect(() => {
 		const savedApiKeys = localStorage.getItem("apikeys");
 		if (savedApiKeys) {
 			const currentApiKeys = JSON.parse(savedApiKeys);
 			setCurrentApiKeys(currentApiKeys);
+			setTranscriptApiVariant(
+				currentApiKeys.transcriptApiVariant,
+			);
 		}
 	}, []);
 
 	const handleSaveApiKey = () => {
-		if (!rapidKey?.trim() || !geminiKey?.trim()) {
+		/*if (!rapidKey?.trim() || !geminiKey?.trim() || !transcriptApiUrl?.trim()) {
 			return alert("Enter valid api key.");
+		}*/
+
+		const newData = {};
+		if (rapidKey.trim()) {
+			newData.rapidKey = rapidKey;
 		}
+		if (geminiKey.trim()) {
+			newData.geminiKey = geminiKey;
+		}
+		if (transcriptApiUrl.trim()) {
+			newData.transcriptApiUrl = transcriptApiUrl;
+		}
+
+		const savedData = localStorage.getItem("apikeys");
+
+		console.log({ newData });
 
 		localStorage.setItem(
 			"apikeys",
 			JSON.stringify({
-				rapidKey,
-				geminiKey,
+				...JSON.parse(savedData),
+				...newData,
 			}),
 		);
 
 		setCurrentApiKeys({
 			rapidKey,
 			geminiKey,
+			transcriptApiUrl,
 		});
 		alert("Saved successfully.");
 	};
@@ -58,6 +81,42 @@ const Popup = ({ setDisplayPopup }) => {
 		if (!popupBox.contains(e.target)) {
 			setDisplayPopup(false);
 		}
+	};
+
+	const toggleTranscriptApiVariant = ev => {
+		try {
+			const savedApiData = localStorage.getItem("apikeys");
+			console.log(JSON.parse(savedApiData));
+
+			localStorage.setItem(
+				"apikeys",
+				JSON.stringify({
+					...JSON.parse(savedApiData),
+					transcriptApiVariant:
+						transcriptApiVariant === "rapidApi"
+							? "customApi"
+							: "rapidApi",
+				}),
+			);
+			console.log(
+				`Should change to:`,
+				transcriptApiVariant === "rapidApi"
+					? "customApi"
+					: "rapidApi",
+			);
+			setCurrentApiKeys(currKeys => ({
+				...currKeys,
+				transcriptApiVariant:
+					transcriptApiVariant === "rapidApi"
+						? "customApi"
+						: "rapidApi",
+			}));
+		} catch (error) {
+			console.log(error);
+		}
+		setTranscriptApiVariant(currVariant =>
+			currVariant === "rapidApi" ? "customApi" : "rapidApi",
+		);
 	};
 
 	return (
@@ -87,6 +146,17 @@ const Popup = ({ setDisplayPopup }) => {
 						onChange={e => setGeminiKey(e.target.value)}
 					/>
 				</div>
+				<div className="">
+					<label>Enter transcript api url</label>
+					<input
+						className="w-full p-1 border-[1px] border-white outline-0 rounded"
+						type="text"
+						value={transcriptApiUrl}
+						onChange={e =>
+							setTranscriptApiUrl(e.target.value)
+						}
+					/>
+				</div>
 				<button
 					onClick={handleSaveApiKey}
 					type="button"
@@ -95,14 +165,44 @@ const Popup = ({ setDisplayPopup }) => {
 					Save
 				</button>
 
+				<div className="my-2 flex items-center gap-4 text-sky-700">
+					<label htmlFor="usecustomapi">
+						Use custom api instead rapid api
+					</label>
+					<input
+						onChange={toggleTranscriptApiVariant}
+						id="usecustomapi"
+						type="checkbox"
+						name=""
+						checked={
+							currentApiKeys?.transcriptApiVariant ===
+							"customApi"
+						}
+					/>
+				</div>
+
 				{currentApiKeys && (
 					<div className="w-full overflow-auto">
 						<h2 className="text-xl my-2 ">
 							Currently saved api keys
 						</h2>
-						<p>Rapid api key: {currentApiKeys?.rapidKey}</p>
 						<p>
-							Gemini api key: {currentApiKeys?.geminiKey}
+							<span className="font-bold">
+								Rapid api key:
+							</span>{" "}
+							{currentApiKeys?.rapidKey}
+						</p>
+						<p>
+							<span className="font-bold">
+								Gemini api key:
+							</span>{" "}
+							{currentApiKeys?.geminiKey}
+						</p>
+						<p>
+							<span className="font-bold">
+								Custom transcript api url:
+							</span>{" "}
+							{currentApiKeys?.transcriptApiUrl}
 						</p>
 					</div>
 				)}

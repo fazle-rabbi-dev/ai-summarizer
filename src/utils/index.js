@@ -16,3 +16,13 @@ export const getYouTubeVideoId = url => {
 		return null; // Invalid URL format
 	}
 };
+
+export const copyToClipboard = async (text) => {
+  try {
+    alert(summary)
+    await navigator.clipboard.writeText(summary);
+    console.log("Text copied to clipboard!");
+  } catch (err) {
+    console.error("Failed to copy!", err);
+  }
+};
