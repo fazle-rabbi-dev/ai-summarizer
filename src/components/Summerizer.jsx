@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
 
-import { getYouTubeVideoId } from "../utils/index.js";
-import { copyToClipboard, getSummaryFromGemini } from "../utils";
 import useSummarizer from "../hooks/useSummarizer.js";
 import useSpeech from "../hooks/useSpeech.js";
 import SummaryDisplay from "./SummaryDisplay.jsx";
@@ -61,12 +59,16 @@ const Summarizer = () => {
 				{summary && (
 					<>
 						<button
-							onClick={handleSpeak}
+							onClick={() => handleSpeak(summary)}
 							className="mb-4 px-4 py-2 bg-green-600 text-white rounded">
 							{isSpeaking ? "Reading..." : "🔊 Read Summary"}
 						</button>
 
-						<Controlls />
+						<Controlls
+							speechSpeed={speechSpeed}
+							setSpeechSpeed={setSpeechSpeed}
+							summary={summary}
+						/>
 					</>
 				)}
 				<SummaryDisplay

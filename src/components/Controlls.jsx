@@ -1,6 +1,6 @@
-import React from "react";
+import { copyToClipboard } from "../utils";
 
-const Controlls = ({ speechSpeed, setSpeechSpeed, copyToClipboard }) => {
+const Controlls = ({ speechSpeed, setSpeechSpeed, summary }) => {
 	return (
 		<div className="">
 			<div className="my-4">
@@ -42,7 +42,7 @@ const Controlls = ({ speechSpeed, setSpeechSpeed, copyToClipboard }) => {
 					⏹ Cancel
 				</button>
 				<button
-					onClick={copyToClipboard}
+					onClick={() => copyToClipboard(summary)}
 					className="w-full bg-black/70 text-white rounded-md py-2"
 					type="button">
 					Copy to clipboard

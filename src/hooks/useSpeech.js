@@ -4,7 +4,7 @@ export default function useSpeech() {
 	const [isSpeaking, setIsSpeaking] = useState(false);
 	const [speechSpeed, setSpeechSpeed] = useState(1); // Default speed: 1
 
-	const handleSpeak = () => {
+	const handleSpeak = (summary) => {
 		if (!summary) return;
 
 		if (isSpeaking) {

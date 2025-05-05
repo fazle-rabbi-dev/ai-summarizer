@@ -19,11 +19,28 @@ export const getYouTubeVideoId = (url) => {
 	}
 };
 
-export const copyToClipboard = async (summary) => {
+export const copyToClipboard = async (text) => {
 	try {
-		await navigator.clipboard.writeText(summary);
-		console.log("Text copied to clipboard!");
+		// ✅ First try modern Clipboard API
+		if (navigator.clipboard && window.isSecureContext) {
+			await navigator.clipboard.writeText(text);
+		} else {
+			// ⛔ Fallback for insecure contexts or unsupported browsers
+			const textarea = document.createElement("textarea");
+			textarea.value = text;
+			textarea.style.position = "fixed"; // Avoid scrolling
+			textarea.style.opacity = "0";
+			document.body.appendChild(textarea);
+			textarea.focus();
+			textarea.select();
+
+			const successful = document.execCommand("copy");
+			if (!successful) throw new Error("Fallback copy failed");
+
+			document.body.removeChild(textarea);
+		}
+		console.log("✅ Text copied to clipboard!");
 	} catch (err) {
-		console.error("Failed to copy!", err);
+		console.error("❌ Failed to copy!", err);
 	}
 };

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { getYouTubeVideoId, getSummaryFromGemini } from "../utils";
 
 export default function useSummarizer() {
 	const [input, setInput] = useState("");
@@ -69,12 +70,12 @@ export default function useSummarizer() {
 						);
 				} else {
 					console.log("Using custom api to generate transcript...");
+					const transcriptApiUrl = savedApiKeys.transcriptApiUrl;
+					if (!transcriptApiUrl) throw new Error("Api url is missing.");
 
-					const res = await fetch(
-						`${import.meta.env.VITE_TRANSCRIPT_API_URL}?videoId=${videoId}`
-					);
-					const result = await res.json();
-					transcript = result.transcript;
+					const res = await fetch(`${transcriptApiUrl}?videoId=${videoId}`);
+					const result = await res?.json();
+					transcript = result?.transcript;
 
 					if (!transcript) throw new Error("The video doesn't have captions.");
 					console.log({ transcript });
