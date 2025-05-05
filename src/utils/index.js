@@ -1,4 +1,6 @@
-export const getYouTubeVideoId = url => {
+export { getSummaryFromGemini } from "./gemini";
+
+export const getYouTubeVideoId = (url) => {
 	try {
 		const parsedUrl = new URL(url);
 		const host = parsedUrl.hostname;
@@ -17,12 +19,11 @@ export const getYouTubeVideoId = url => {
 	}
 };
 
-export const copyToClipboard = async (text) => {
-  try {
-    alert(summary)
-    await navigator.clipboard.writeText(summary);
-    console.log("Text copied to clipboard!");
-  } catch (err) {
-    console.error("Failed to copy!", err);
-  }
+export const copyToClipboard = async (summary) => {
+	try {
+		await navigator.clipboard.writeText(summary);
+		console.log("Text copied to clipboard!");
+	} catch (err) {
+		console.error("Failed to copy!", err);
+	}
 };
