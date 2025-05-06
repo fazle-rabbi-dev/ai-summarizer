@@ -16,7 +16,7 @@ const SettingsSection = () => {
 			JSON.stringify({
 				...currentApiKeys,
 				transcriptApiVariant:
-					currentApiKeys?.transcriptApiVariant || "rapidKey",
+					currentApiKeys?.transcriptApiVariant || "rapidApi",
 			}),
 		);
 	}, []);
@@ -52,7 +52,7 @@ const Popup = ({ setDisplayPopup }) => {
 		if (currentApiKeys) {
 			setCurrentApiKeys(currentApiKeys);
 			setTranscriptApiVariant(
-				currentApiKeys.transcriptApiVariant || "rapidKey",
+				currentApiKeys.transcriptApiVariant || "rapidApi",
 			);
 		}
 	}, []);

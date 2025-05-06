@@ -36,7 +36,7 @@ export default function useSummarizer() {
 				if (!savedApiKeys) throw new Error("Failed to get saved api keys.");
 				savedApiKeys = JSON.parse(savedApiKeys);
 				let transcript = "";
-
+        
 				if (savedApiKeys.transcriptApiVariant === "rapidApi") {
 					console.log("Using rapid api to generate transcript...");
 
